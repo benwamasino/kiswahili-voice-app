@@ -1,1 +1,90 @@
+# GitHub Copilot Agent Task
+name: "AI Kiswahili Communication App Design"
+description: >
+  Design and implement an AI-powered offline communication app in Kiswahili
+  for speech-impaired users. Includes speech-to-text, grammar correction, and
+  text-to-speech, optimized for low-end smartphones.
+
+objectives:
+  - Build a React Native app that runs offline and supports Kiswahili speech recognition and synthesis.
+  - Integrate the Swahili TTS model (Benjamin-png/swahili-mms-tts-finetuned) from Hugging Face.
+  - Use Vosk Swahili model for speech-to-text (STT).
+  - Implement local NLP for text correction and autocomplete.
+  - Store user messages locally via SQLite.
+  - Provide accessible, intuitive UI design.
+
+models:
+  - name: "Swahili-MMS-TTS"
+    source: "https://huggingface.co/Benjamin-png/swahili-mms-tts-finetuned"
+    usage: "Text-to-Speech (TTS)"
+    framework: "Transformers (PyTorch)"
+    instructions: >
+      Use this model for offline Swahili speech synthesis. Convert to ONNX if
+      needed for mobile. Wrap inference in a Python Flask service or native
+      bridge to React Native. Cache generated audio locally.
+
+  - name: "Vosk-Swahili"
+    source: "https://alphacephei.com/vosk/models"
+    usage: "Speech-to-Text (STT)"
+    framework: "Vosk"
+    instructions: >
+      Integrate the offline Swahili STT model for real-time transcription.
+      Package model assets in the app bundle for full offline use.
+
+tasks:
+  - setup-project:
+      description: Initialize the React Native app and install dependencies.
+      commands:
+        - npx react-native init KiswahiliVoiceApp
+        - cd KiswahiliVoiceApp
+        - npm install react-native-sqlite-storage react-native-tts axios
+
+  - integrate-tts:
+      description: Integrate the Swahili MMS TTS model from Hugging Face.
+      details:
+        - Use Transformers or ONNX Runtime for inference.
+        - Expose a simple Flask or FastAPI backend route `/synthesize`.
+        - React Native sends text → backend returns base64 audio → play locally.
+
+  - integrate-stt:
+      description: Add offline Swahili speech-to-text with Vosk.
+      details:
+        - Implement Python service with VoskRecognizer.
+        - Return recognized text to React Native frontend via local API call.
+
+  - add-nlp-correction:
+      description: Implement grammar correction and autocomplete.
+      details:
+        - Use a lightweight transformer model (DistilBERT or similar).
+        - Integrate ONNX runtime inference to ensure low latency.
+
+  - build-accessible-ui:
+      description: Design UI optimized for accessibility.
+      details:
+        - Buttons: Speak / Type / Listen.
+        - Large icons, adjustable font size, voice feedback.
+        - Simple Swahili language interface.
+
+  - connect-frontend-backend:
+      description: Connect React Native frontend to local backend.
+      details:
+        - Use Axios or fetch to call Python endpoints.
+        - Handle audio streaming for TTS and real-time text updates for STT.
+
+  - optimize-models:
+      description: Apply model quantization for mobile.
+      details:
+        - Quantize both TTS and NLP models using ONNX tools.
+        - Target size <100MB each.
+
+deliverables:
+  - React Native frontend with TTS, STT, and NLP correction.
+  - Python backend exposing inference endpoints.
+  - SQLite database for message persistence.
+  - Documentation for model conversion, quantization, and deployment.
+
+success_criteria:
+  - App runs fully offline on Android.
+  - End-to-end latency < 1.5s.
+  - All communication in Kiswahili.
 
