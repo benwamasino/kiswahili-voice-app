@@ -1,0 +1,9 @@
+flask==3.0.0
+flask-cors==4.0.0
+transformers==4.35.0
+torch==2.1.0
+vosk==0.3.45
+sounddevice==0.4.6
+scipy==1.11.4
+numpy==1.26.0
+onnxruntime==1.16.0
